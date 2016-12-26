@@ -15,4 +15,6 @@ $easy = new easymysql($db);
 //var_dump($easy->getFromMysqlOptions('epl_user', 0, array('nom'), array('baba'), 'age'));
 //$easy->deleteFromMysql('epl_user', 'nom', 'baba');
 
-echo $easy->getFromMysqlOptions('epl_user', PDO::FETCH_ASSOC, array('nom'), array('bichi'), "age")['age'];
+//echo $easy->getFromMysqlOptions('epl_user', PDO::FETCH_ASSOC, array('nom'), array('bichi'), "age")['age'];
+
+$easy->addToMysql('epl_user', ['nom', 'age'], ['christophe', 13]);

@@ -2,6 +2,11 @@
 
 declare (strict_types=1);
 
+/**
+ * author: Cutrix ^_^
+ * l'objet de cette classe est de gerer un acces plus rapide de la bdd
+ */
+
 class easymysql {
     
     private $db;
@@ -35,6 +40,16 @@ class easymysql {
         return $q->fetchAll($fetch);
     }
     
+    /**
+     * Permet d'obtenir des valeurs avec des options
+     * @param string $table
+     * @param int $fetch
+     * @param array $options
+     * @param array $values
+     * @param string $arg
+     * @return array
+     */
+    
     public function getFromMysqlOptions(string $table, int $fetch, array $options, array $values, string ...$arg) {
         if (empty($arg)) {            
             $q = $this->db->prepare('SELECT * FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
@@ -46,11 +61,30 @@ class easymysql {
         return $q->fetch($fetch);
     }
     
-    public function addToMysql($table, array $options, array $values) {
+    /**
+     * Permet d'ajouter des donnees a mysql
+     * @param string $table
+     * @param array $options
+     * @param array $values
+     * @return mixed
+     */
+    
+    public function addToMysql(string $table, array $options, array $values) {
+        $q = $this->db->prepare('INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')");
+        $q->execute();             
+        //'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('.$this->walk($values, ", ").')'
+        //echo 'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')";
         
     }
     
-    public function deleteFromMysql($table, $option, $value) {
+    /**
+     * Supprime des donnees de la base de donnees
+     * @param string $table
+     * @param string $option
+     * @param string $value
+     */
+    
+    public function deleteFromMysql(string $table, string $option, string $value) {
         $q = $this->db->prepare("DELETE FROM ".$table." WHERE ".$option." = '".$value."'");        
         $q->execute();
     }            
