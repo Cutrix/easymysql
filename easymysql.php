@@ -73,6 +73,7 @@ class easymysql {
     public function addToMysql(string $table, array $options, array $values) {
         $q = $this->db->prepare('INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')");
         $q->execute();             
+        return true;
         //'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('.$this->walk($values, ", ").')'
         //echo 'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')";
         
@@ -88,6 +89,7 @@ class easymysql {
     public function deleteFromMysql(string $table, string $option, string $value) {
         $q = $this->db->prepare("DELETE FROM ".$table." WHERE ".$option." = '".$value."'");        
         $q->execute();
+        return true;
     }            
     
     private function walk(array $tb, $delimiter = " ") {
