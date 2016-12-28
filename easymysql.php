@@ -63,7 +63,7 @@ class easymysql {
     }
     
     /**
-     * Permet d'ajouter des donnees a mysql
+     * Permet d'ajouter des donnees a la base de donnees
      * @param string $table
      * @param array $options
      * @param array $values
