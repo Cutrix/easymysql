@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 /**
  * author: Cutrix ^_^
+ * email: houessinonlandry@gmail.com
  * l'objet de cette classe est de gerer un acces plus rapide de la bdd
  */
 
