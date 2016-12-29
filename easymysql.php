@@ -145,7 +145,14 @@ class easymysql {
         $q = $this->db->prepare("DELETE FROM ".$table." WHERE ".$option." = '".$value."'");        
         $q->execute();
         return true;
-    }               
+    }  
+    
+    
+    public function query($req, $fetch = 0) {
+        $q = $this->db->prepare($req);
+        $q->execute();
+        return $q->fetchAll($fetch);
+    }
     
     private function walk(array $tb, $delimiter = " ") {
         if (empty($delimiter)) return implode(', ', $tb);
