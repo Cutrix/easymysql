@@ -6,6 +6,7 @@ declare (strict_types=1);
  * author: Cutrix ^_^
  * email: houessinonlandry@gmail.com
  * l'objetif de cette classe est de permettre d'accelerer la manipulation de la bdd.
+ * Elle permet de manipuler les donnees de base (crud) 
  */
 
 class easymysql {
@@ -15,12 +16,7 @@ class easymysql {
 
     public function __construct($db) {
         $this->setDb($db);
-    }
-        
-    
-    public function setDb(PDO $db) {
-        $this->db = $db;
-    }
+    }               
     
     /**
      * Selectionne de donnees de la base de donnees sans options
@@ -42,7 +38,27 @@ class easymysql {
     }
     
     /**
-     * Permet d'obtenir des valeurs avec des options
+     * Permet de selectionner des donnees de la bdd de maniere unique(sans doublon)
+     * @param string $table
+     * @param int $fetch
+     * @param string $arg
+     * @return array
+     */
+    
+    public function getFromMysqlUnique(string $table, int $fetch, string ...$arg) {
+        if (empty($arg)) {
+            $q = $this->db->prepare("SELECT DISTINCT * FROM $table");
+            $q->execute();
+            return $q->fetchAll($fetch);
+        }
+        $q = $this->db->prepare('SELECT DISTINCT '.$this->walk($arg).' FROM '.$table);
+        $q->execute();
+        return $q->fetchAll($fetch);
+    }
+    
+    /**
+     * Permet d'obtenir des valeurs avec des options, le parametre fetch est defini 
+     * avec 0 par defaut on peut aussi utiliser les notations PDO (PDO::FETCH_OBJ) par 
      * @param string $table
      * @param int $fetch
      * @param array $options
@@ -55,11 +71,32 @@ class easymysql {
         if (empty($arg)) {            
             $q = $this->db->prepare('SELECT * FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
             $q->execute(array($this->walk($values)));
-            return $q->fetch($fetch);
+            return $q->fetchAll($fetch);
         }
         $q = $this->db->prepare('SELECT '.$this->walk($arg).' FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
         $q->execute(array($this->walk($values)));
-        return $q->fetch($fetch);
+        return $q->fetchAll($fetch);
+    }
+    
+    /**
+     * Defini les valeurs avec optiions dans la bdd (sans doublon)
+     * @param string $table
+     * @param int $fetch
+     * @param array $options
+     * @param array $values
+     * @param string $arg
+     * @return array
+     */
+    
+    public function getFromMysqlOptionsUnique(string $table, int $fetch, array $options, array $values, string ...$arg) {
+        if (empty($arg)) {            
+            $q = $this->db->prepare('SELECT DISTINCT * FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
+            $q->execute(array($this->walk($values)));
+            return $q->fetchAll($fetch);
+        }
+        $q = $this->db->prepare('SELECT DISTINCT '.$this->walk($arg).' FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
+        $q->execute(array($this->walk($values)));
+        return $q->fetchAll($fetch);
     }
     
     /**
@@ -80,6 +117,24 @@ class easymysql {
     }
     
     /**
+     * Permet de modifier des donnees de la bdd
+     * @param string $table
+     * @param string $amodif
+     * @param string $nvval
+     * @param string $modif
+     * @param string $oldVal
+     */
+    
+    
+    public function updateFromMysql(string $table, string $amodif, string $nvval, string $modif, string $oldVal) {
+        $q = $this->db->prepare('UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"');
+        $q->execute();
+        //"UPDATE $table SET $amodif = $nvval WHERE $modif = $oldVal"
+        echo 'UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"';
+    }
+    
+    
+    /**
      * Supprime des donnees de la base de donnees
      * @param string $table
      * @param string $option
@@ -90,11 +145,15 @@ class easymysql {
         $q = $this->db->prepare("DELETE FROM ".$table." WHERE ".$option." = '".$value."'");        
         $q->execute();
         return true;
-    }            
+    }               
     
     private function walk(array $tb, $delimiter = " ") {
         if (empty($delimiter)) return implode(', ', $tb);
         return implode($delimiter, $tb);
+    }
+    
+     private function setDb(PDO $db) {
+        $this->db = $db;
     }
      
 }
