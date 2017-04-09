@@ -110,10 +110,7 @@ class easymysql {
     public function addToMysql(string $table, array $options, array $values) {
         $q = $this->db->prepare('INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')");
         $q->execute();             
-        return true;
-        //'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('.$this->walk($values, ", ").')'
-        //echo 'INSERT INTO '.$table.' ('.$this->walk($options, ", ").') VALUES ('."'".$this->walk($values, "','")."')";
-        
+        return true;        
     }
     
     /**
@@ -130,7 +127,7 @@ class easymysql {
         $q = $this->db->prepare('UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"');
         $q->execute();
         //"UPDATE $table SET $amodif = $nvval WHERE $modif = $oldVal"
-        echo 'UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"';
+        //echo 'UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"';
     }
     
     
@@ -153,13 +150,25 @@ class easymysql {
         $q->execute();
         return $q->fetchAll($fetch);
     }
+
+
+    /**
+     * countFromMysql permet de compter des donnees de la base
+     * @param string nom de la table
+     * @return mixed    
+     * */
+
+    public function countFromMysql(string $table)
+    {
+        return $this->db->query("SELECT COUNT(*) FROM $table")->fetchColumn();
+    }
     
     private function walk(array $tb, $delimiter = " ") {
         if (empty($delimiter)) return implode(', ', $tb);
         return implode($delimiter, $tb);
     }
     
-     private function setDb(PDO $db) {
+    private function setDb(PDO $db) {
         $this->db = $db;
     }
      
