@@ -26,7 +26,7 @@ class easymysql {
      * @return mixed
      */
     
-    public function getFromMysql(string $table, int $fetch, string ...$arg) {
+    public function getFromMysql(string $table, int $fetch = 0, string ...$arg) {
         if (empty($arg)) {
             $q = $this->db->prepare("SELECT * FROM $table");
             $q->execute();
@@ -45,7 +45,7 @@ class easymysql {
      * @return array
      */
     
-    public function getFromMysqlUnique(string $table, int $fetch, string ...$arg) {
+    public function getFromMysqlUnique(string $table, int $fetch = 0, string ...$arg) {
         if (empty($arg)) {
             $q = $this->db->prepare("SELECT DISTINCT * FROM $table");
             $q->execute();
@@ -125,9 +125,20 @@ class easymysql {
     
     public function updateFromMysql(string $table, string $amodif, string $nvval, string $modif, string $oldVal) {
         $q = $this->db->prepare('UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"');
-        $q->execute();
-        //"UPDATE $table SET $amodif = $nvval WHERE $modif = $oldVal"
-        //echo 'UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"';
+        $q->execute();       
+    }
+    
+    /**
+     * Ajout d'une methode permettant de faire un recherche avec des regex
+     * Peut permettre aussi de chercher avec des REGEX
+     * @param string $table la table sur laquelle se fait la recherche
+     * @param string $q Description
+     */
+    
+    public function searchFromMysql(string $table, $q) {
+        if (gettype($q) == 'int') {
+            echo 'baba';
+        }
     }
     
     
