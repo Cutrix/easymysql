@@ -20,9 +20,9 @@ class easymysql {
     
     /**
      * Selectionne de donnees de la base de donnees sans options
-     * @param string $table-Nom de la table
-     * @param int $fetch-Retourne le mode de fonctionnement
-     * @param string-variadic
+     * @param string $table de la table
+     * @param int $fetch Retourne le mode de fonctionnement
+     * @param string $arg variadic
      * @return mixed
      */
     
