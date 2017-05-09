@@ -135,9 +135,13 @@ class easymysql {
      * @param string $q Description
      */
     
-    public function searchFromMysql(string $table, $q) {
-        if (gettype($q) == 'int') {
-            echo 'baba';
+    public function searchFromMysql(string $table, $search, int $fetch = 0, string $column_id = 'id', string ...$arg) {
+        if (empty($arg)) {
+            if (gettype($search) == 'integer') {
+                $q = $this->db->prepare("SELECT * FROM ".$table." WHERE ".$column_id." = ".$search);
+                $q->execute();
+                return $q->fetchAll($fetch);
+            }
         }
     }
     
@@ -166,7 +170,7 @@ class easymysql {
     /**
      * countFromMysql permet de compter des donnees de la base
      * @param string nom de la table
-     * @return mixed    
+     * @return mixed        
      * */
 
     public function countFromMysql(string $table)
