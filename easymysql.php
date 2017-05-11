@@ -190,7 +190,9 @@ class easymysql {
     }
     
     private function walk(array $tb, $delimiter = " ") {
-        if (empty($delimiter)) return implode(', ', $tb);
+        if (empty($delimiter)) {
+            return implode(', ', $tb);
+        }
         return implode($delimiter, $tb);
     }
     
