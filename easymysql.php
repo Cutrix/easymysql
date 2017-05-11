@@ -158,7 +158,17 @@ class easymysql {
         $q = $this->db->prepare("DELETE FROM ".$table." WHERE ".$option." = '".$value."'");        
         $q->execute();
         return true;
-    }  
+    }
+    
+    /**
+     * Permet d'avoir le dernier id en base
+     * @return int le dernier id
+     * @param void 
+     */
+    public function getLastId() {
+        return $this->db->lastInsertId();
+    }
+    
     
     
     public function query($req, $fetch = 0) {
