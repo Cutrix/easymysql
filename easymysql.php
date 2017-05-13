@@ -61,14 +61,14 @@ class easymysql {
      * Permet d'obtenir des valeurs avec des options, le parametre fetch est defini 
      * avec 0 par defaut on peut aussi utiliser les notations PDO (PDO::FETCH_OBJ) par 
      * @param string $table
-     * @param int $fetch
-     * @param array $options
+     * @param int $options
      * @param array $values
+     * @param array $fetch
      * @param string $arg
      * @return array
      */
     
-    public function getFromMysqlOptions(string $table, int $fetch, array $options, array $values, string ...$arg) {
+    public function getFromMysqlOptions(string $table, array $options, array $values, int $fetch = 0, string ...$arg) {
         if (empty($arg)) {            
             $q = $this->db->prepare(self::EVERYTHING_SELECTOR.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
             $q->execute(array($this->walk($values)));
@@ -82,14 +82,14 @@ class easymysql {
     /**
      * Defini les valeurs avec optiions dans la bdd (sans doublon)
      * @param string $table
-     * @param int $fetch
-     * @param array $options
-     * @param array $values
+     * @param int $options
+     * @param arra$valuesns
+     * @param array $fetch
      * @param string $arg
      * @return array
      */
     
-    public function getFromMysqlOptionsUnique(string $table, int $fetch, array $options, array $values, string ...$arg) {
+    public function getFromMysqlOptionsUnique(string $table, array $options, array $values, int $fetch = 0, string ...$arg) {
         if (empty($arg)) {            
             $q = $this->db->prepare('SELECT DISTINCT * FROM '.$table.' WHERE '.$this->walk($options, "=?, ").'=?');
             $q->execute(array($this->walk($values)));
