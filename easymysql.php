@@ -125,27 +125,9 @@ class easymysql {
     
     
     public function updateFromMysql(string $table, string $amodif, string $nvval, string $modif, string $oldVal) {
-        $q = $this->db->prepare('UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"');
+        $q = $this->db->prepare('UPDATE '.$table.' SET '.$amodif.' = "'.$nvval.'" WHERE '.$modif.' = "'.$oldVal.'"²');
         $q->execute();       
     }
-    
-    /**
-     * Ajout d'une methode permettant de faire un recherche avec des regex
-     * Peut permettre aussi de chercher avec des REGEX
-     * @param string $table la table sur laquelle se fait la recherche
-     * @param string $q Description
-     */
-    
-    public function searchFromMysql(string $table, $search, int $fetch = 0, string $column_id = 'id', string ...$arg) {
-        if (empty($arg)) {
-            if (gettype($search) == 'integer') {
-                $q = $this->db->prepare(self::EVERYTHING_SELECTOR.$table." WHERE ".$column_id." = ".$search);
-                $q->execute();
-                return $q->fetchAll($fetch);
-            }
-        }
-    }
-    
     
     /**
      * Supprime des donnees de la base de donnees
