@@ -171,6 +171,18 @@ class easymysql {
         return $this->db->query("SELECT COUNT(*) FROM $table")->fetchColumn();
     }
     
+    /** 
+     * @param string $table la table des operations
+     * @param string $key La recherche a faire 
+     * @param string $col Colonne de la table
+     */
+    
+    public function searchFromMysql($table, $col, $key) {
+        $q = $this->db->prepare(self::EVERYTHING_SELECTOR.$table.'WHERE '.$col.' LIKE %'.$key.'%');
+        $q->execute();
+        return $q->fetchAll();
+    }
+    
     private function walk(array $tb, $delimiter = " ") {
         if (empty($delimiter)) {
             return implode(', ', $tb);
